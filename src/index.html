@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <title>FastVelib</title>
+    <meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id='map'>
+    </div>
+    <script>
+window.initMap = async function () {
+  const map = new google.maps.Map(document.getElementById('map'), {
+    center: {
+      lat: 48.85341,
+      lng: 2.3488,
+    },
+    zoom: 13,
+    styles: [
+      {
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#f5f5f5"
+          }
+        ]
+      },
+      {
+        "elementType": "labels.icon",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#616161"
+          }
+        ]
+      },
+      {
+        "elementType": "labels.text.stroke",
+        "stylers": [
+          {
+            "color": "#f5f5f5"
+          }
+        ]
+      },
+      {
+        "featureType": "administrative.land_parcel",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "administrative.land_parcel",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#bdbdbd"
+          }
+        ]
+      },
+      {
+        "featureType": "administrative.neighborhood",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#eeeeee"
+          }
+        ]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "labels.text",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "poi",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#757575"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.business",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#e5e5e5"
+          }
+        ]
+      },
+      {
+        "featureType": "poi.park",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#9e9e9e"
+          }
+        ]
+      },
+      {
+        "featureType": "road",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#ffffff"
+          }
+        ]
+      },
+      {
+        "featureType": "road",
+        "elementType": "labels",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "road",
+        "elementType": "labels.icon",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "road.arterial",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#757575"
+          }
+        ]
+      },
+      {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#dadada"
+          }
+        ]
+      },
+      {
+        "featureType": "road.highway",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#616161"
+          }
+        ]
+      },
+      {
+        "featureType": "road.local",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#9e9e9e"
+          }
+        ]
+      },
+      {
+        "featureType": "transit",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "transit.line",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#e5e5e5"
+          }
+        ]
+      },
+      {
+        "featureType": "transit.station",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#eeeeee"
+          }
+        ]
+      },
+      {
+        "featureType": "water",
+        "elementType": "geometry",
+        "stylers": [
+          {
+            "color": "#c9c9c9"
+          }
+        ]
+      },
+      {
+        "featureType": "water",
+        "elementType": "labels.text",
+        "stylers": [
+          {
+            "visibility": "off"
+          }
+        ]
+      },
+      {
+        "featureType": "water",
+        "elementType": "labels.text.fill",
+        "stylers": [
+          {
+            "color": "#9e9e9e"
+          }
+        ]
+      }
+    ],
+  })
+  const data = await fetch(
+    'https://opendata.paris.fr/api/records/1.0/search/?dataset=velib-disponibilite-en-temps-reel&fields=nbbike,nbebike,nbfreeedock,geo,station_name,station_state&rows=2000'
+  ).then((r) => r.json())
+  const stations = data.records
+    .filter((r) => r.fields.station_state === 'Operative')
+    .map((r) => r.fields)
+  console.log(`${data.nhits} stations in the API, ${stations.length} operative.`)
+  stations.forEach((station) => {
+    const coords = {
+      lat: station.geo[0],
+      lng: station.geo[1],
+    }
+    const marker = new google.maps.Marker({ // eslint-disable-line no-new
+      position: coords,
+      map: map,
+      title: station.station_name,
+      label: '' + station.nbebike,
+    })
+    const infoWindow = new google.maps.InfoWindow({
+      content: `
+        <b>${station.station_name}</b>
+        <p>${station.nbebike} e-bikes</p>
+        <p>${station.nbbike} bikes</p>
+        <p>${station.nbfreeedock} docks</p>
+      `,
+    })
+    google.maps.event.addListener(marker, 'click', () => {
+      infoWindow.open(map, marker)
+    })
+  })
+}
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?callback=initMap&key=AIzaSyC8RgbAdbBEPEYba_XPMG3oWERIMR6HyzE" async defer></script>
+  </body>
+</html>

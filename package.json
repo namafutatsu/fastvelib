@@ -1,0 +1,20 @@
+{
+  "name": "fastvelib",
+  "version": "0.1.0",
+  "description": "Fast Velib",
+  "main": "dist/bundle.js",
+  "dependencies": {
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "engines": {
+    "npm": ">=6",
+    "node": ">=11"
+  },
+  "files": [
+    "dist",
+    "README.rst"
+  ]
+}
