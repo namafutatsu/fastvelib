@@ -25,13 +25,25 @@
     <div id='map'>
     </div>
     <script>
+
+function getCurrentPosition(options = {}) {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject, options)
+  })
+}
+
 window.initMap = async function () {
+  const posData = await getCurrentPosition()
+  const coords = {
+    lat: posData.coords.latitude,
+    lng: posData.coords.longitude,
+  }
+
+  console.log('got coordinates', coords)
+
   const map = new google.maps.Map(document.getElementById('map'), {
-    center: {
-      lat: 48.85341,
-      lng: 2.3488,
-    },
-    zoom: 13,
+    center: coords,
+    zoom: 18,
     styles: [
       {
         "elementType": "geometry",
@@ -261,9 +273,16 @@ window.initMap = async function () {
       }
     ],
   })
+
   const data = await fetch(
-    'https://opendata.paris.fr/api/records/1.0/search/?dataset=velib-disponibilite-en-temps-reel&fields=nbbike,nbebike,nbfreeedock,geo,station_name,station_state&rows=2000'
+    'https://opendata.paris.fr/api/records/1.0/search/?dataset=velib-disponibilite-en-temps-reel' +
+    '&fields=nbbike,nbebike,nbfreeedock,geo,station_name,station_state' +
+    '&rows=2000' +
+    `&geofilter.distance=${coords.lat},${coords.lng},500`
   ).then((r) => r.json())
+
+  console.log('got data', data)
+
   const stations = data.records
     .filter((r) => r.fields.station_state === 'Operative')
     .map((r) => r.fields)

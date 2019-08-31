@@ -1,2 +1,2 @@
-deploy: clean dist
-	rsync -avz --delete -e ssh dist/ myserver:projects/fastvelib.iso3103.net/dist/
+deploy:
+	rsync -avz --delete -e ssh src/ myserver:projects/fastvelib.laflaque.fr/dist/
