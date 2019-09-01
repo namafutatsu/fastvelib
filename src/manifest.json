@@ -3,9 +3,14 @@
   "name": "Fast Vélib'",
   "icons": [
     {
+      "src": "velib-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
       "src": "velib.png",
       "type": "image/png",
-      "sizes": "225x225"
+      "sizes": "512x512"
     }
   ],
   "start_url": "?source=pwa",
