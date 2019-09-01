@@ -1,0 +1,15 @@
+{
+  "short_name": "FastVelib",
+  "name": "Fast Vélib'",
+  "icons": [
+    {
+      "src": "velib.png",
+      "type": "image/png",
+      "sizes": "225x225"
+    }
+  ],
+  "start_url": "?source=pwa",
+  "background_color": "#023e58",
+  "display": "standalone",
+  "theme_color": "#023e58"
+}
