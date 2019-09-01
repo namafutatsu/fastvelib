@@ -20,7 +20,7 @@
       "id": "com.laflaque.apps.fastvelib"
     }
   ],
-  "start_url": "?source=pwa",
+  "start_url": "/?source=pwa",
   "background_color": "#023e58",
   "display": "standalone",
   "theme_color": "#023e58"
