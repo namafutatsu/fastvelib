@@ -43,7 +43,7 @@ window.initMap = async function () {
 
   const map = new google.maps.Map(document.getElementById('map'), {
     center: coords,
-    zoom: 18,
+    zoom: 17,
     disableDefaultUI: true,
     styles: [
       {
@@ -327,7 +327,9 @@ window.initMap = async function () {
   const stations = data.records
     .filter((r) => r.fields.station_state === 'Operative')
     .map((r) => r.fields)
+
   console.log(`${data.nhits} stations in the API, ${stations.length} operative.`)
+
   stations.forEach((station) => {
     const coords = {
       lat: station.geo[0],
